@@ -14,7 +14,16 @@
     </style>
   </head>
   <body>
+    <div class="head">
+        <h1>Interns Online is 0</h1>
+    </div>
+    <p><em>Refresh to get a new username (unless you have multiple tabs open)</em></p>
+    <br>
+    <hr>
     <ul id="messages"></ul>
+    <br>
+    <br>
+    <br>
     <form action="">
       <input id="m" autocomplete="off" /><button>Send</button>
     </form>
@@ -23,12 +32,22 @@
     <script>
       var socket = io();
       $('form').submit(function(){
-        socket.emit('chat message', $('#m').val());
-        $('#m').val('');
-        return false;
+        if ($('#m').val() == ('' || ' ')){
+          //do nothing
+          return false;
+        }
+        else{
+          socket.emit('chat message', $('#m').val());
+          $('#m').val('');
+          return false;
+        }
+        
       });
       socket.on('chat message', function(msg){
         $('#messages').append($('<li>').text(msg));
+      });
+      socket.on('onlinecount', function(msg){
+        $(".head h1").html("Interns Online is "+String(msg));
       });
     </script>
   </body>
